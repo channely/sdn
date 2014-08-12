@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graph>
+	<nodes>
+		<node id="controller">
+			<name>Controller</name>
+			<x>300</x>
+			<y>-350</y>
+			<img>assets/images/controller.png</img>
+		</node>
+		<node id="hub1">
+			<name>OpenFlow Switch 1</name>
+			<x>-400</x>
+			<y>0</y>
+			<img>assets/images/router.png</img>
+		</node>
+		<node id="hub2">
+			<name>OpenFlow Switch 2</name>
+			<x>-200</x>
+			<y>100</y>
+			<img>assets/images/router.png</img>
+		</node>
+		<node id="hub3">
+			<name>OpenFlow Switch 3</name>
+			<x>-50</x>
+			<y>200</y>
+			<img>assets/images/router.png</img>
+		</node>
+		<node id="hub4">
+			<name>OpenFlow Switch 4</name>
+			<x>200</x>
+			<y>200</y>
+			<img>assets/images/router.png</img>
+		</node>
+		<node id="hub5">
+			<name>OpenFlow Switch 5</name>
+			<x>350</x>
+			<y>50</y>
+			<img>assets/images/router.png</img>
+		</node>
+		<node id="hub6">
+			<name>OpenFlow Switch 6</name>
+			<x>0</x>
+			<y>-100</y>
+			<img>assets/images/router.png</img>
+		</node>
+		<node id="hub7">
+			<name>OpenFlow Switch 7</name>
+			<x>200</x>
+			<y>-200</y>
+			<img>assets/images/router.png</img>
+		</node>
+		<node id="internet1">
+			<name></name>
+			<x>-700</x>
+			<y>-150</y>
+			<img>assets/images/internet.png</img>
+		</node>
+		<node id="internet2">
+			<name></name>
+			<x>-700</x>
+			<y>0</y>
+			<img>assets/images/internet.png</img>
+		</node>
+		<node id="internet3">
+			<name></name>
+			<x>-700</x>
+			<y>150</y>
+			<img>assets/images/internet.png</img>
+		</node>		
+		<node id="server1">
+			<name>Firewall</name>
+			<x>-450</x>
+			<y>-150</y>
+			<img>assets/images/firewall.png</img>
+		</node>		
+		<node id="server2">
+			<name>IPS</name>
+			<x>-100</x>
+			<y>-200</y>
+			<img>assets/images/firewall.png</img>
+		</node>	
+		<node id="server3">
+			<name>Anti-DDoS</name>
+			<x>-350</x>
+			<y>250</y>
+			<img>assets/images/firewall.png</img>
+		</node>	
+		<node id="server4">
+			<name>WAF</name>
+			<x>-150</x>
+			<y>350</y>
+			<img>assets/images/firewall.png</img>
+		</node>	
+		<node id="server5">
+			<name>AV-FW</name>
+			<x>300</x>
+			<y>350</y>
+			<img>assets/images/firewall.png</img>
+		</node>	
+		<node id="server6">
+			<name>Web Server</name>
+			<x>650</x>
+			<y>-180</y>
+			<img>assets/images/web.png</img>
+		</node>	
+		<node id="server7">
+			<name>Mail Server</name>
+			<x>650</x>
+			<y>0</y>
+			<img>assets/images/mail.png</img>
+		</node>	
+		<node id="server8">
+			<name>DB Server</name>
+			<x>650</x>
+			<y>180</y>
+			<img>assets/images/database.png</img>
+		</node>	
+	</nodes>
+	<edges>
+		<edge>
+			<start>hub1</start>
+			<end>hub2</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub2</start>
+			<end>hub3</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub3</start>
+			<end>hub4</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub4</start>
+			<end>hub5</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub5</start>
+			<end>hub6</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub6</start>
+			<end>hub7</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub6</start>
+			<end>hub1</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub2</start>
+			<end>hub6</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub2</start>
+			<end>hub5</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub3</start>
+			<end>hub5</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub5</start>
+			<end>hub7</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>internet1</start>
+			<end>hub1</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>internet2</start>
+			<end>hub1</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>internet3</start>
+			<end>hub1</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub1</start>
+			<end>server1</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub6</start>
+			<end>server2</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub2</start>
+			<end>server3</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub3</start>
+			<end>server4</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub4</start>
+			<end>server5</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub5</start>
+			<end>server8</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub5</start>
+			<end>server7</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>hub7</start>
+			<end>server6</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+	 	<edge id="edge1">
+			<start>controller</start>
+			<end>hub1</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge2">
+			<start>controller</start>
+			<end>hub2</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge3">
+			<start>controller</start>
+			<end>hub3</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge4">
+			<start>controller</start>
+			<end>hub4</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge5">
+			<start>controller</start>
+			<end>hub5</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge6">
+			<start>controller</start>
+			<end>hub6</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge7">
+			<start>controller</start>
+			<end>hub7</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+	</edges>
+	<groups>
+		<group id="cloudGroup">
+			hub1,hub2,hub3,hub4,hub5,hub6,hub7,server1,server2,server3,server4,server5
+		</group>
+		<group id="webGroup">
+			server6,server7,server8
+		</group>
+	</groups>
+	<texts>
+		<text>
+			<name>CloudWAF Based on SDN</name>
+			<x>-500</x>
+			<y>-350</y>
+			<fontSize>30</fontSize>
+			<color>#000</color>
+		</text>
+	</texts>
+	<paths>
+		<path id="path1">
+		 	<route>internet1,hub1,server1,hub1,hub2,server3,hub2,hub6,server2,hub6,hub5,server7,hub5,hub6,hub1,internet1</route>
+		 	<start></start>
+		 </path>
+		<path id="path2">
+			<route>internet2,hub1,server1,hub1,hub6,server2,hub6,hub7,server6,hub7,hub6,hub2,hub1,internet2</route>
+			<start></start>
+		</path>
+		<path id="path3">
+			<route>internet3,hub1,server1,hub1,hub2,server3,hub2,hub3,server4,hub3,hub4,server5,hub4,hub5,server8,hub5,hub4,hub3,hub2,hub1,internet3</route>
+			<start></start>
+		</path>
+	</paths>
+</graph>
