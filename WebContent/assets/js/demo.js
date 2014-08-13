@@ -76,6 +76,7 @@ $(function () {
 	var edges = {};
 	var groups = {};
 	var paths = {};
+	var timers = [];
 	$.get("config.xml", function(xml){
 		
 		// create node
@@ -85,8 +86,17 @@ $(function () {
 			var x = parseInt($(this).children("x").text(),10);
 			var y = parseInt($(this).children("y").text(),10);
 			var img = $(this).children("img").text();
-			var router = createNode(name, x, y, img);
-			nodes[id]=router;
+			var visible = $(this).children("visible").text();
+			var node = createNode(name, x, y, img);
+			if(visible == "false"){
+				setTimeout(function (){
+					node.visible = false;
+					node.invalidateVisibility();
+					graph.invalidate();
+				}, 0);
+			}
+
+			nodes[id]=node;
 		});
 		
 		// create edge
@@ -116,7 +126,6 @@ $(function () {
 			groups[id] = group;
 		});
 		
-		
 		// create text
 		$(xml).find("text").each(function(i){
 			var name = $(this).children("name").text();
@@ -127,267 +136,111 @@ $(function () {
 			createText(name, x, y, fontSize, color);
 		});
 		
+		// create label
+		$(xml).find("label").each(function(i){
+			var data = $(this).children("data").text();
+			var color = $(this).children("color").text();
+			var group = groups[$(this).children("belong").text()];
+			var fontSize = parseInt($(this).children("fontSize").text(),10);
+			var interval = parseInt($(this).children("interval").text(),10);
+			
+			var label = new Q.LabelUI();
+			label.position = Q.Position.CENTER_TOP;
+			label.anchorPosition = Q.Position.CENTER_BOTTOM;
+			label.border = 1;
+			label.data = data;
+			label.padding = new Q.Insets(12, 15);
+			label.offsetY = -10;
+			label.backgroundColor = color;
+			label.borderColor = color;
+			label.fontSize = fontSize;
+			group.addUI(label);
+			
+			var showLabel = 0;
+		    var timer = setTimeout(function MOVE(){
+				if (showLabel % interval == 0) {
+					group.removeUI(label);
+				} else {
+					group.addUI(label);
+				}
+				showLabel += 200;
+				
+		        timer = setTimeout(MOVE, 200);
+			}, 200);
+		    timers.push(timer);
+		});
+		
 		// create path
 		$(xml).find("path").each(function(i){
 			var id=$(this).attr("id");
 			var route = $(this).children("route").text().trim().split(",");
+			var start = parseInt($(this).children("start").text(),10);
+			var step = parseInt($(this).children("step").text(),10);
+			var router = nodes[$(this).children("router").text()];
+			var server = nodes[$(this).children("server").text()];
+			var threshold = $(this).children("threshold").text();
 			var path = new Q.Path();
+			var arrow;
+			var startnode = null;
 			$.each(route, function(index, value){
 				var node = nodes[value];
 				if(index == 0){
+					startnode = node;
 					path.moveTo(node.location.x, node.location.y);
+					setTimeout(function MOVE(){
+						arrow = createArrow( "", node.location.x, node.location.y, "arrow.7", "#4ECDC4");
+					}, start);
 				}else{
 					path.lineTo(node.location.x, node.location.y);
 				}
 			});
+			path.validate();
 			paths[id] = path;
+
+			var L = path.length;
+			if( threshold == "" ){
+				threshold = step / 2;
+			}else{
+				threshold = parseInt(threshold, 10);
+			}
+			var x = 0;
+			var timer = setTimeout(function MOVE(){
+			    x += step;
+			    x %= L;
+			    var p = path.getLocation(x);
+			    if(Math.abs(p.x - router.location.x) < threshold){
+			    	server.visible = server.visible === false;
+			    	server.invalidateVisibility();
+			    	graph.invalidate();
+			    }else if(Math.abs(p.x - startnode.location.x) < threshold){
+			    	x = 0;
+			    }
+			    arrow.location = new Q.Point(p.x, p.y);
+			    arrow.rotate = p.rotate;
+			    timer = setTimeout(MOVE, 200);
+			}, start);
+			
+			timers.push(timer);
 		});
+		
+
 	});
 	
-//	var controllerPNG = "assets/images/controller.png";
-//	var hubPNG = "assets/images/router.png";
-//	var firewallPNG = "assets/images/firewall.png";
-//	var webPNG = "assets/images/web.png";
-//	var mailPNG = "assets/images/mail.png";
-//	var databasePNG = "assets/images/database.png";
-//	var internetPNG = "assets/images/internet.png";
-//	createText("CloudWAF Based on SDN", -500, -350, 30, "#000");
-//	
-//	var controller = createNode("Controller", 300, -350, controllerPNG);
-//	var cloudGroup = createGroup("CloudWAF Based on SDN");
-//	var hub1 = createNode("OpenFlow Switch 1", -400, 0, hubPNG, cloudGroup);
-//	var hub2 = createNode("OpenFlow Switch 2", -200, 100, hubPNG, cloudGroup);
-//	var hub3 = createNode("OpenFlow Switch 3", -50, 200, hubPNG, cloudGroup);
-//	var hub4 = createNode("OpenFlow Switch 4", 200, 200, hubPNG, cloudGroup);
-//	var hub5 = createNode("OpenFlow Switch 5", 350, 50, hubPNG, cloudGroup);
-//	var hub6 = createNode("OpenFlow Switch 6", 0, -100, hubPNG, cloudGroup);
-//	var hub7 = createNode("OpenFlow Switch 7", 200, -200, hubPNG, cloudGroup);
-//	
-//	createEdge(hub1, hub2, "#2898E0", true);
-//	createEdge(hub2, hub3, "#2898E0", true);
-//	createEdge(hub3, hub4, "#2898E0", true);
-//	createEdge(hub4, hub5, "#2898E0", true);
-//	createEdge(hub5, hub6, "#2898E0", true);
-//	createEdge(hub6, hub7, "#2898E0", true);
-//	createEdge(hub6, hub1, "#2898E0", true);
-//	createEdge(hub2, hub6, "#2898E0", true);
-//	createEdge(hub2, hub5, "#2898E0", true);
-//	createEdge(hub3, hub5, "#2898E0", true);
-//	createEdge(hub5, hub7, "#2898E0", true);
-//	
-//	var edge1 = createEdge(controller, hub1, "#FF6B6B", false, true);
-//	var edge2 = createEdge(controller, hub2, "#FF6B6B", false, true);
-//	var edge3 = createEdge(controller, hub3, "#FF6B6B", false, true);
-//	var edge4 = createEdge(controller, hub4, "#FF6B6B", false, true);
-//	var edge5 = createEdge(controller, hub5, "#FF6B6B", false, true);
-//	var edge6 = createEdge(controller, hub6, "#FF6B6B", false, true);
-//	var edge7 = createEdge(controller, hub7, "#FF6B6B", false, true);
-//	
-//	var internet1 = createNode("", -700, -150, internetPNG);
-//	var internet2 = createNode("", -700, 0, internetPNG);
-//	var internet3 = createNode("Internet", -700, 150, internetPNG);
-//	createEdge(internet1, hub1, "#2898E0", true);
-//	createEdge(internet2, hub1, "#2898E0", true);
-//	createEdge(internet3, hub1, "#2898E0", true);
-//	
-//	var server1 = createNode("Firewall", -450, -150, firewallPNG, cloudGroup);
-//	var server2 = createNode("IPS", -100, -200, firewallPNG, cloudGroup);
-//	var server3 = createNode("Anti-DDoS", -350, 250, firewallPNG, cloudGroup);
-//	var server4 = createNode("WAF", -150, 350, firewallPNG, cloudGroup);
-//	var server5 = createNode("AV-FW", 300, 350, firewallPNG, cloudGroup);
-//	
-//	var webGroup = createGroup("");
-//	var server6 = createNode("Web Server", 650, -180, webPNG, webGroup);
-//	var server7 = createNode("Mail Server", 650, 0, mailPNG, webGroup);
-//	var server8 = createNode("DB Server", 650, 180, databasePNG, webGroup);
-//	
-//	createEdge(hub1, server1, "#2898E0", true);
-//	createEdge(hub6, server2, "#2898E0", true);
-//	createEdge(hub2, server3, "#2898E0", true);
-//	createEdge(hub3, server4, "#2898E0", true);
-//	createEdge(hub4, server5, "#2898E0", true);
-//	createEdge(hub5, server8, "#2898E0", true);
-//	createEdge(hub5, server7, "#2898E0", true);
-//	createEdge(hub7, server6, "#2898E0", true);
-//	
-//	var path1 = new Q.Path();
-//	path1.moveTo(internet1.location.x, internet1.location.y);
-//	path1.lineTo(hub1.location.x, hub1.location.y);
-//	path1.lineTo(server1.location.x, server1.location.y);
-//	path1.lineTo(hub1.location.x, hub1.location.y);
-//	path1.lineTo(hub2.location.x, hub2.location.y);
-//	path1.lineTo(server3.location.x, server3.location.y);
-//	path1.lineTo(hub2.location.x, hub2.location.y);
-//	path1.lineTo(hub6.location.x, hub6.location.y);
-//	path1.lineTo(server2.location.x, server2.location.y);
-//	path1.lineTo(hub6.location.x, hub6.location.y);
-//	path1.lineTo(hub5.location.x, hub5.location.y);
-//	path1.lineTo(server7.location.x, server7.location.y);
-//	path1.lineTo(hub5.location.x, hub5.location.y);
-//	path1.lineTo(hub6.location.x, hub6.location.y);
-//	path1.lineTo(hub1.location.x, hub1.location.y);
-//	path1.lineTo(internet1.location.x, internet1.location.y);
-//	path1.validate();
-//	
-//	var path2 = new Q.Path();
-//	path2.moveTo(internet2.location.x, internet2.location.y);
-//	path2.lineTo(hub1.location.x, hub1.location.y);
-//	path2.lineTo(server1.location.x, server1.location.y);
-//	path2.lineTo(hub1.location.x, hub1.location.y);
-//	path2.lineTo(hub6.location.x, hub6.location.y);
-//	path2.lineTo(server2.location.x, server2.location.y);
-//	path2.lineTo(hub6.location.x, hub6.location.y);
-//	path2.lineTo(hub7.location.x, hub7.location.y);
-//	path2.lineTo(server6.location.x, server6.location.y);
-//	path2.lineTo(hub7.location.x, hub7.location.y);
-//	path2.lineTo(hub6.location.x, hub6.location.y);
-//	path2.lineTo(hub2.location.x, hub2.location.y);
-//	path2.lineTo(hub1.location.x, hub1.location.y);
-//	path2.lineTo(internet2.location.x, internet2.location.y);
-//	path2.validate();
-//
-//	var path3 = new Q.Path();
-//	path3.moveTo(internet3.location.x, internet3.location.y);
-//	path3.lineTo(hub1.location.x, hub1.location.y);
-//	path3.lineTo(server1.location.x, server1.location.y);
-//	path3.lineTo(hub1.location.x, hub1.location.y);
-//	path3.lineTo(hub2.location.x, hub2.location.y);
-//	path3.lineTo(server3.location.x, server3.location.y);
-//	path3.lineTo(hub2.location.x, hub2.location.y);
-//	path3.lineTo(hub3.location.x, hub3.location.y);
-//	path3.lineTo(server4.location.x, server4.location.y);
-//	path3.lineTo(hub3.location.x, hub3.location.y);
-//	path3.lineTo(hub4.location.x, hub4.location.y);
-//	path3.lineTo(server5.location.x, server5.location.y);
-//	path3.lineTo(hub4.location.x, hub4.location.y);
-//	path3.lineTo(hub5.location.x, hub5.location.y);
-//	path3.lineTo(server8.location.x, server8.location.y);
-//	path3.lineTo(hub5.location.x, hub5.location.y);
-//	path3.lineTo(hub4.location.x, hub4.location.y);
-//	path3.lineTo(hub3.location.x, hub3.location.y);
-//	path3.lineTo(hub2.location.x, hub2.location.y);
-//	path3.lineTo(hub1.location.x, hub1.location.y);
-//	path3.lineTo(internet3.location.x, internet3.location.y);
-//	path3.validate();
-//	
-//	setTimeout(function (){
-//		server6.visible = false;
-//		server6.invalidateVisibility();
-//		server7.visible = false;
-//		server7.invalidateVisibility();
-//		server8.visible = false;
-//		server8.invalidateVisibility();
-//		graph.invalidate();
-//	}, 0);
-//	
-//	var shapename = "arrow.7";
-//	var arrow1 = createArrow( "", internet1.location.x, internet1.location.y, shapename, "#4ECDC4");
-//	
-//	var step = 40;
-//	var step1 = step/2;
-//	var L1 = path1.length;
-//	var x1 = 0;
-//	var timer1 = setTimeout(function MOVE(){
-//	    x1 += step;
-//	    x1 %= L1;
-//	    var p = path1.getLocation(x1);
-//	    if(Math.abs(p.x - hub5.location.x) < step1){
-//	    	server7.visible = server7.visible === false;
-//	    	server7.invalidateVisibility();
-//	    	graph.invalidate();
-//	    }else if(Math.abs(p.x - internet1.location.x) < step1){
-//	    	x1 = 0;
-//	    }
-//	    arrow1.location = new Q.Point(p.x, p.y);
-//	    arrow1.rotate = p.rotate;
-//	    timer1 = setTimeout(MOVE, 200);
-//	}, 200);
-//	
-//	var arrow2;
-//	setTimeout(function MOVE(){
-//		arrow2 = createArrow( "", internet2.location.x, internet2.location.y, shapename, "#4ECDC4");
-//	}, 20000);
-//	
-//	var L2 = path2.length;
-//	var x2 = 0;
-//	var timer2 = setTimeout(function MOVE(){
-//	    x2 += step;
-//	    x2 %= L2;
-//	    var p = path2.getLocation(x2);
-//	    if(Math.abs(p.x - hub7.location.x) < step1){
-//	    	server6.visible = server6.visible === false;
-//	    	server6.invalidateVisibility();
-//	    	graph.invalidate();
-//	    }else if(Math.abs(p.x - internet2.location.x) < step1){
-//	    	x2 = 0;
-//	    }
-//	    arrow2.location = new Q.Point(p.x, p.y);
-//	    arrow2.rotate = p.rotate;
-//	    timer2 = setTimeout(MOVE, 200);
-//	}, 20000);
-//	
-//	var arrow3;
-//	setTimeout(function MOVE(){
-//		arrow3 = createArrow( "", internet3.location.x, internet3.location.y, shapename, "#4ECDC4");
-//	}, 5000);
-//	
-//	var L3 = path3.length;
-//	var x3 = 0;
-//	var timer3 = setTimeout(function MOVE(){
-//	    x3 += step;
-//	    x3 %= L3;
-//	    var p = path3.getLocation(x3);
-//	    if(Math.abs(p.x - hub5.location.x) < 16){
-//	    //	console.log(Math.abs(p.x - hub5.location.x) + " " + p.x+" " +p.y +" " +hub5.location.x + " "+hub5.location.y);
-//	    	server8.visible = server8.visible === false;
-//	    	server8.invalidateVisibility();
-//	    	graph.invalidate();
-//	    }else if(Math.abs(p.x - internet3.location.x) < step1){
-//	    	x3 = 0;
-//	    }
-//	    arrow3.location = new Q.Point(p.x, p.y);
-//	    arrow3.rotate = p.rotate;
-//	    timer3 = setTimeout(MOVE, 200);
-//	}, 5000);
-//	
-//	var index = 0;
-//	var showLabel1 = 0;
-//    var timer = setTimeout(function MOVE(){
-//	    index++;
-//	    index = index%20;
-//	    edge1.setStyle(Q.Styles.ARROW_TO_OFFSET, -0.3 -0.02 * (20 - index));
-//	    edge2.setStyle(Q.Styles.ARROW_TO_OFFSET, -0.3 -0.02 * (20 - index));
-//	    edge3.setStyle(Q.Styles.ARROW_TO_OFFSET, -0.3 -0.02 * (20 - index));
-//	    edge4.setStyle(Q.Styles.ARROW_TO_OFFSET, -0.3 -0.02 * (20 - index));
-//	    edge5.setStyle(Q.Styles.ARROW_TO_OFFSET, -0.3 -0.03 * (20 - index));
-//	    edge6.setStyle(Q.Styles.ARROW_TO_OFFSET, -0.3 -0.03 * (20 - index));
-//	    edge7.setStyle(Q.Styles.ARROW_TO_OFFSET, -0.3 -0.03 * (20 - index));
-//		if (showLabel1 % 4000 == 0) {
-//			cloudGroup.removeUI(label);
-//		} else {
-//			cloudGroup.addUI(label);
-//		}
-//		showLabel1 += 200;
-//        timer = setTimeout(MOVE, 150);
-//	}, 150);
-//	
-//	function destroy(){
-//	    clearTimeout(timer1);
-//	    clearTimeout(timer2);
-//	    clearTimeout(timer3);
-//	    clearTimeout(timer);
-//	}
-//	
-//	var label = new Q.LabelUI();
-//	label.position = Q.Position.CENTER_TOP;
-//	label.anchorPosition = Q.Position.CENTER_BOTTOM;
-//	label.border = 1;
-//	label.data = "Controller send Flow Table to OpenFlow Switchs";
-//	label.padding = new Q.Insets(12, 15);
-//	label.offsetY = -10;
-//	label.backgroundColor = "#D9EDF7";
-//	label.borderColor = "#D9EDF7";
-//	label.fontSize = 16;
-//	cloudGroup.addUI(label);
-	
+	var index = 0;
+    var timer = setTimeout(function MOVE(){
+	    index++;
+	    index = index%20;
+	    $.each(edges,function(name, edge) { 
+	    	edge.setStyle(Q.Styles.ARROW_TO_OFFSET, -0.3 -0.02 * (20 - index));
+	    });
+
+        timer = setTimeout(MOVE, 200);
+	}, 200);
+    timers.push(timer);
+
+	function destroy(){
+		for(var timer in timers){
+			 clearTimeout(timer);
+		}
+	}	
 });
