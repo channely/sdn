@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webs>
+	<web>
+		<name>Mail Server</name>
+		<ip>192.168.22.35</ip>
+	</web>
+	<web>
+		<name>Web Server</name>
+		<ip>192.168.10.112</ip>
+	</web>
+	<web>
+		<name>DB Server</name>
+		<ip>192.168.10.2</ip>
+	</web>
+</webs>

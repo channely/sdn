@@ -86,8 +86,10 @@ $(function () {
 			var x = parseInt($(this).children("x").text(),10);
 			var y = parseInt($(this).children("y").text(),10);
 			var img = $(this).children("img").text();
+			var type = $(this).children("type").text();
 			var visible = $(this).children("visible").text();
 			var node = createNode(name, x, y, img);
+			node.type = type;
 			if(visible == "false"){
 				setTimeout(function (){
 					node.visible = false;
@@ -225,7 +227,34 @@ $(function () {
 		
 
 	});
-	
+
+	graph.onclick = function(evt){
+		var node = evt.getData();
+		var type = node.type;
+	    if(type == "controller"){
+	    	$.get("web.xml", function(xml){
+	    		var content = "";
+	    		$(xml).find("web").each(function(i){
+	    			var name = $(this).children("name").text();
+	    			var ip = $(this).children("ip").text();
+	    			content += name + " : " +ip +"<br>";
+	    		});
+	    		bootbox.confirm(content, function(){}); 
+	    	});
+	    	
+	    }else if(type == "router"){
+	    	$.get("web.xml", function(xml){
+	    		var content = "";
+	    		$(xml).find("web").each(function(i){
+	    			var name = $(this).children("name").text();
+	    			var ip = $(this).children("ip").text();
+	    			content += name + " : " +ip +"<br>";
+	    		});
+	    		bootbox.confirm(content, function(){}); 
+	    	});
+	    }
+	};
+
 	var index = 0;
     var timer = setTimeout(function MOVE(){
 	    index++;

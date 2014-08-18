@@ -6,102 +6,119 @@
 			<x>300</x>
 			<y>-350</y>
 			<img>assets/images/controller.png</img>
+			<type>controller</type>
 		</node>
 		<node id="router1">
 			<name>OpenFlow Switch 1</name>
 			<x>-400</x>
 			<y>0</y>
 			<img>assets/images/router.png</img>
+			<type>router</type>
 		</node>
 		<node id="router2">
 			<name>OpenFlow Switch 2</name>
 			<x>-200</x>
 			<y>100</y>
 			<img>assets/images/router.png</img>
+			<type>router</type>
 		</node>
 		<node id="router3">
 			<name>OpenFlow Switch 3</name>
 			<x>-50</x>
 			<y>200</y>
 			<img>assets/images/router.png</img>
+			<type>router</type>
 		</node>
 		<node id="router4">
 			<name>OpenFlow Switch 4</name>
 			<x>200</x>
 			<y>200</y>
 			<img>assets/images/router.png</img>
+			<type>router</type>
 		</node>
 		<node id="router5">
 			<name>OpenFlow Switch 5</name>
 			<x>350</x>
 			<y>50</y>
 			<img>assets/images/router.png</img>
+			<type>router</type>
 		</node>
 		<node id="router6">
 			<name>OpenFlow Switch 6</name>
 			<x>0</x>
 			<y>-100</y>
 			<img>assets/images/router.png</img>
+			<type>router</type>
 		</node>
 		<node id="router7">
 			<name>OpenFlow Switch 7</name>
 			<x>200</x>
 			<y>-200</y>
 			<img>assets/images/router.png</img>
+			<type>router</type>
 		</node>
 		<node id="internet1">
 			<name></name>
 			<x>-700</x>
 			<y>-150</y>
 			<img>assets/images/internet.png</img>
+			<type>internet</type>
 		</node>
 		<node id="internet2">
 			<name></name>
 			<x>-700</x>
 			<y>0</y>
 			<img>assets/images/internet.png</img>
+			<type>internet</type>
 		</node>
 		<node id="internet3">
 			<name></name>
 			<x>-700</x>
 			<y>150</y>
 			<img>assets/images/internet.png</img>
+			<type>internet</type>
 		</node>		
 		<node id="server1">
 			<name>Firewall</name>
 			<x>-450</x>
 			<y>-150</y>
 			<img>assets/images/firewall.png</img>
+			<type>firewall</type>
 		</node>		
 		<node id="server2">
 			<name>IPS</name>
 			<x>-100</x>
 			<y>-200</y>
 			<img>assets/images/firewall.png</img>
+			<type>firewall</type>
 		</node>	
 		<node id="server3">
 			<name>Anti-DDoS</name>
 			<x>-350</x>
 			<y>250</y>
 			<img>assets/images/firewall.png</img>
+			<type>firewall</type>
 		</node>	
 		<node id="server4">
 			<name>WAF</name>
 			<x>-150</x>
 			<y>350</y>
 			<img>assets/images/firewall.png</img>
+			<type>firewall</type>
 		</node>	
 		<node id="server5">
 			<name>AV-FW</name>
 			<x>300</x>
 			<y>350</y>
 			<img>assets/images/firewall.png</img>
+			<type>firewall</type>
 		</node>	
 		<node id="server6">
 			<name>Web Server</name>
 			<x>650</x>
 			<y>-180</y>
 			<img>assets/images/web.png</img>
+			<type>server</type>
 			<visible>false</visible>
 		</node>	
 		<node id="server7">
@@ -109,6 +126,7 @@
 			<x>650</x>
 			<y>0</y>
 			<img>assets/images/mail.png</img>
+			<type>server</type>
 			<visible>false</visible>
 		</node>	
 		<node id="server8">
@@ -116,6 +134,7 @@
 			<x>650</x>
 			<y>180</y>
 			<img>assets/images/database.png</img>
+			<type>server</type>
 			<visible>false</visible>
 		</node>	
 	</nodes>
