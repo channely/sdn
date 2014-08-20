@@ -72,6 +72,7 @@ $(function () {
 		arrow.setStyle(Q.Styles.SHAPE_STROKE_STYLE, color);
 		return arrow;
 	}
+	
 	var nodes = {};
 	var edges = {};
 	var groups = {};
@@ -224,34 +225,85 @@ $(function () {
 			
 			timers.push(timer);
 		});
-		
-
 	});
 
+	function refreshController(){
+	    $.ajax({ 
+	    	url: "server.xml", 
+	    	success: function(xml){
+	    		var content = (new Date()).toString() +"<br>";
+    	    	$(xml).find("server").each(function(i){
+	    	    	var name = $(this).children("name").text();
+	    	    	var ip = $(this).children("ip").text();
+	    	    	content += name + " : " +ip + "<br>"; 
+    	    	});
+    	    	$("#controller").empty().append(content);
+	    	}
+	    });			
+	}
+
+	function refreshRouter(){
+	    $.ajax({ 
+	    	url: "router.xml", 
+	    	success: function(xml){
+	    		var content = "<table class='table table-bordered table-hover'><tbody>";
+    	    	$(xml).find("router").each(function(i){
+	    	    	var ipsrc = $(this).children("ipsrc").text();
+	    	    	var ipdst = $(this).children("ipdst").text();
+	    	    	var srcport = $(this).children("srcport").text();
+	    	    	var dstport = $(this).children("dstport").text();
+	    	    	content += "<tr class='success'><td>IP源地址</td><td>" + ipsrc+ "</td></tr>"; 
+	    	    	content += "<tr class='warning'><td>IP目的地址</td><td>" + ipdst+ "</td></tr>"; 
+	    	    	content += "<tr class='info'><td>源端口</td><td>" + srcport+ "</td></tr>"; 
+	    	    	content += "<tr class='danger'><td>目的端口</td><td>" + dstport+ "</td></tr>"; 
+	    	    	content += "<tr><td>时间</td><td>" + (new Date()).toString()+ "</td></tr>";
+    	    	});
+    	    	content += "</tbody></table>"
+    	    	$("#switch").empty().append(content);
+	    	}
+	    });			
+	}
+	
 	graph.onclick = function(evt){
 		var node = evt.getData();
 		var type = node.type;
 	    if(type == "controller"){
-	    	$.get("web.xml", function(xml){
-	    		var content = "";
-	    		$(xml).find("web").each(function(i){
-	    			var name = $(this).children("name").text();
-	    			var ip = $(this).children("ip").text();
-	    			content += name + " : " +ip +"<br>";
-	    		});
-	    		bootbox.confirm(content, function(){}); 
-	    	});
+	    	setTimeout(refreshController, 0);
+	    	var controllerTimer = setInterval(refreshController, 1000);
+	    	
+		    bootbox.dialog({
+		    	title: "<h2>Server</h2>",
+		    	message: "<div id='controller'></div>",
+		    	buttons: {
+		    		main: {
+		    			label: "关闭",
+			    		className: "btn-success",
+			    	    callback: function() {
+					    	clearTimeout(controllerTimer);
+					    	return true;
+					    }
+			    	}
+		    	}
+		   });
 	    	
 	    }else if(type == "router"){
-	    	$.get("web.xml", function(xml){
-	    		var content = "";
-	    		$(xml).find("web").each(function(i){
-	    			var name = $(this).children("name").text();
-	    			var ip = $(this).children("ip").text();
-	    			content += name + " : " +ip +"<br>";
-	    		});
-	    		bootbox.confirm(content, function(){}); 
-	    	});
+	    	setTimeout(refreshRouter, 0);
+	    	var routerTimer = setInterval(refreshRouter, 1000);
+	    	
+		    bootbox.dialog({
+		    	title: "<h2>Flow Table</h2>",
+		    	message: "<div id='switch'></div>",
+		    	buttons: {
+		    		main: {
+		    			label: "关闭",
+			    		className: "btn-success",
+			    	    callback: function() {
+					    	clearTimeout(routerTimer);
+					    	return true;
+					    }
+			    	}
+		    	}
+		   });
 	    }
 	};
 
