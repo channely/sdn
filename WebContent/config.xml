@@ -345,10 +345,10 @@
 	</edges>
 	<groups>
 		<group id="cloudGroup">
-			router1,router2,router3,router4,router5,router6,router7,server1,server2,server3,server4,server5
+			<contain>router1,router2,router3,router4,router5,router6,router7,server1,server2,server3,server4,server5</contain>
 		</group>
 		<group id="webGroup">
-			server6,server7,server8
+			<contain>server6,server7,server8</contain>
 		</group>
 	</groups>
 	<texts>

@@ -119,8 +119,8 @@ $(function () {
 		// create group
 		$(xml).find("group").each(function(i){
 			var id=$(this).attr("id");
-			var html = $(this).html().trim();
-			var contain = html.split(",");
+			var html = $(this).children("contain").text();
+			var contain = html.toString().split(",");
 			var group = createGroup("");
 			$.each(contain, function(index, value){
 				var node = nodes[value];
@@ -231,12 +231,26 @@ $(function () {
 	    $.ajax({ 
 	    	url: "server.xml", 
 	    	success: function(xml){
-	    		var content = (new Date()).toString() +"<br>";
+	    		var content = "<table class='table table-bordered table-hover'>";
+	    		content += "<thead><th>服务器</th><th>动态IP</th></thead>";
     	    	$(xml).find("server").each(function(i){
 	    	    	var name = $(this).children("name").text();
 	    	    	var ip = $(this).children("ip").text();
-	    	    	content += name + " : " +ip + "<br>"; 
+	    	    	  var rip1=parseInt(Math.random()*10000%255+1,10);
+	    	          var rip2=parseInt(Math.random()*10000%255+1,10);
+	    	          var rip3=parseInt(Math.random()*10000%255+1,10);
+	    	          var rip4=parseInt(Math.random()*10000%255+1,10);
+	    	    	ip = rip1 + "." + rip2 + "." + rip3 + "." + rip4;
+	    	    	
+	    	    	if(i%2){
+	    	    		content += "<tr>";
+	    	    	}else{
+	    	    		content += "<tr class='success'>";
+	    	    	}
+	    	    	
+	    	    	content += "<td>" + name + "</td><td>" +ip + "</td><tr>"; 
     	    	});
+    	    	content += "</tbody></table>";
     	    	$("#controller").empty().append(content);
 	    	}
 	    });			
@@ -246,19 +260,43 @@ $(function () {
 	    $.ajax({ 
 	    	url: "router.xml", 
 	    	success: function(xml){
-	    		var content = "<table class='table table-bordered table-hover'><tbody>";
-    	    	$(xml).find("router").each(function(i){
+	    		var content = "<table class='table table-bordered table-hover'>";
+	    		content += "<thead><th>Ingress Port</th><th>Ether Source</th><th>Ether Dst</th><th>Ether Type</th><th>Vlan id</th>" +
+	    				"<th>Vlan Priority</th><th>IP src</th><th>IP dst</th><th>IP proto</th><th>IP ToS bits</th>" +
+	    				"<th>TCP/UDP Src Port</th><th>TCP/UDP Dst Port</th><th>Counter</th><th>Action</th></thead>";
+	    		content +=	"<tbody>";
+    	    	$(xml).find("row").each(function(i){
+	    	    	var ingressport = $(this).children("ingressport").text();
+	    	    	var ethersource = $(this).children("ethersource").text();
+	    	    	var etherdst = $(this).children("etherdst").text();
+	    	    	var ethertype = $(this).children("ethertype").text();
+	    	    	var vlanid = $(this).children("vlanid").text();
+	    	    	var vlanpriority = $(this).children("vlanpriority").text();
 	    	    	var ipsrc = $(this).children("ipsrc").text();
 	    	    	var ipdst = $(this).children("ipdst").text();
+	    	       	var ipproto = $(this).children("ipproto").text();
+	    	     	var iptosbits = $(this).children("iptosbits").text();
 	    	    	var srcport = $(this).children("srcport").text();
 	    	    	var dstport = $(this).children("dstport").text();
-	    	    	content += "<tr class='success'><td>IP源地址</td><td>" + ipsrc+ "</td></tr>"; 
-	    	    	content += "<tr class='warning'><td>IP目的地址</td><td>" + ipdst+ "</td></tr>"; 
-	    	    	content += "<tr class='info'><td>源端口</td><td>" + srcport+ "</td></tr>"; 
-	    	    	content += "<tr class='danger'><td>目的端口</td><td>" + dstport+ "</td></tr>"; 
-	    	    	content += "<tr><td>时间</td><td>" + (new Date()).toString()+ "</td></tr>";
+	    	    	var counter = $(this).children("counter").text();
+	    	    	var action = $(this).children("action").text();
+	    	    	
+	    	    	  var rip1=parseInt(Math.random()*10000%255+1,10);
+	    	          var rip2=parseInt(Math.random()*10000%255+1,10);
+	    	          var rip3=parseInt(Math.random()*10000%255+1,10);
+	    	          var rip4=parseInt(Math.random()*10000%255+1,10);
+	    	          ipdst = rip1 + "." + rip2 + "." + rip3 + "." + rip4;
+	    	    	
+	    	    	if(i%2){
+	    	    		content += "<tr>";
+	    	    	}else{
+	    	    		content += "<tr class='success'>";
+	    	    	}
+	    	    	content += "<td>" + ingressport+ "</td><td>"+ethersource+"</td><td>"+etherdst+"</td><td>"+ethertype+"</td><td>"+vlanid+"</td><td>"
+	    	    	+vlanpriority+"</td><td>"+ipsrc+"</td><td>"+ipdst+"</td><td>"+ipproto+"</td><td>"+iptosbits+"</td><td>"+srcport+"</td><td>"+dstport
+	    	    	+"</td><td>"+counter+"</td><td>"+action+"</td></tr>"; 
     	    	});
-    	    	content += "</tbody></table>"
+    	    	content += "</tbody></table>";
     	    	$("#switch").empty().append(content);
 	    	}
 	    });			
@@ -266,7 +304,10 @@ $(function () {
 	
 	graph.onclick = function(evt){
 		var node = evt.getData();
+	   	console.log(node);
+		if( node == undefined || node == null) return;
 		var type = node.type;
+		console.log(type);
 	    if(type == "controller"){
 	    	setTimeout(refreshController, 0);
 	    	var controllerTimer = setInterval(refreshController, 1000);
@@ -303,7 +344,8 @@ $(function () {
 					    }
 			    	}
 		    	}
-		   });
+		   }).find("div.modal-dialog").addClass("largeWidth");
+		    
 	    }
 	};
 
