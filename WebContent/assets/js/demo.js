@@ -304,7 +304,6 @@ $(function () {
 	
 	graph.onclick = function(evt){
 		var node = evt.getData();
-	   	console.log(node);
 		if( node == undefined || node == null) return;
 		var type = node.type;
 		console.log(type);
