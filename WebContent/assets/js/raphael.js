@@ -1,60 +1,84 @@
-Raphael.fn.connection = function (obj1, obj2, line, bg) {
+Raphael.fn.connection = function (obj1, obj2, color, dashed) {
     var bb1 = obj1.getBBox(),
         bb2 = obj2.getBBox(),
-        p = [{x: bb1.x + bb1.width / 2, y: bb1.y - 1},
-        {x: bb1.x + bb1.width / 2, y: bb1.y + bb1.height + 1},
-        {x: bb1.x - 1, y: bb1.y + bb1.height / 2},
-        {x: bb1.x + bb1.width + 1, y: bb1.y + bb1.height / 2},
-        {x: bb2.x + bb2.width / 2, y: bb2.y - 1},
-        {x: bb2.x + bb2.width / 2, y: bb2.y + bb2.height + 1},
-        {x: bb2.x - 1, y: bb2.y + bb2.height / 2},
-        {x: bb2.x + bb2.width + 1, y: bb2.y + bb2.height / 2}],
-        d = {}, dis = [];
-    for (var i = 0; i < 4; i++) {
-        for (var j = 4; j < 8; j++) {
-            var dx = Math.abs(p[i].x - p[j].x),
-                dy = Math.abs(p[i].y - p[j].y);
-            if ((i == j - 4) || (((i != 3 && j != 6) || p[i].x < p[j].x) && ((i != 2 && j != 7) || p[i].x > p[j].x) && ((i != 0 && j != 5) || p[i].y > p[j].y) && ((i != 1 && j != 4) || p[i].y < p[j].y))) {
-                dis.push(dx + dy);
-                d[dis[dis.length - 1]] = [i, j];
-            }
-        }
+        x1 = bb1.x + bb1.width/2,
+        y1 = bb1.y + bb1.height/2,
+        x2 = bb2.x + bb2.width/2,
+        y2 = bb2.y + bb2.height/2;
+    var attrs = null;
+    if(dashed){
+    	attrs = { stroke: color, "stroke-dasharray": "- "};
+    }else{
+    	attrs = { stroke: color };
     }
-    if (dis.length == 0) {
-        var res = [0, 4];
-    } else {
-        res = d[Math.min.apply(Math, dis)];
-    }
-    var x1 = p[res[0]].x,
-        y1 = p[res[0]].y,
-        x4 = p[res[1]].x,
-        y4 = p[res[1]].y;
-    dx = Math.max(Math.abs(x1 - x4) / 2, 10);
-    dy = Math.max(Math.abs(y1 - y4) / 2, 10);
-    var x2 = [x1, x1, x1 - dx, x1 + dx][res[0]].toFixed(3),
-        y2 = [y1 - dy, y1 + dy, y1, y1][res[0]].toFixed(3),
-        x3 = [0, 0, 0, 0, x4, x4, x4 - dx, x4 + dx][res[1]].toFixed(3),
-        y3 = [0, 0, 0, 0, y1 + dy, y1 - dy, y4, y4][res[1]].toFixed(3);
-    var path = ["M", x1.toFixed(3), y1.toFixed(3), "C", x2, y2, x3, y3, x4.toFixed(3), y4.toFixed(3)].join(",");
-    if (line && line.line) {
-        line.bg && line.bg.attr({path: path});
-        line.line.attr({path: path});
-    } else {
-        var color = typeof line == "string" ? line : "#000";
-        return {
-            bg: bg && bg.split && this.path(path).attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": bg.split("|")[1] || 3}),
-            line: this.path(path).attr({stroke: color, fill: "none"}),
-            from: obj1,
-            to: obj2
-        };
-    }
+    var c = this.path("M"+x1+" "+y1+"L"+x2+" "+y2).attr(attrs);
+    c.toBack();
+    return c;
 };
-var width, height;
+
+Raphael.fn.node = function (image, x, y, width, height, text) {
+	var i = this.image(image, x, y, width, height);
+	
+	if(text){
+		var tx = x + width/2;
+		var ty = y + height + 10;
+		var tt = this.text(tx, ty, text).attr({"font-size": 16});
+		i.text = tt;
+	}
+    return i;
+};
+
+Raphael.fn.arrow = function (node1, node2, color) {
+	var box1 = node1.getBBox(),
+	box2= node2.getBBox(),
+	x1 = box1.x + box1.width/2,
+	y1 = box1.y + box1.height/2,
+	x2 = box2.x + box2.width/2,
+	y2 = box2.y + box2.height/2;
+	var arrow = this.path(["M", x1, y1] + "m0,-4l-10,0,0,8,10,0,0,4,16,-8,-16,-8,4,0z").attr({fill: color, stroke: "none", "stroke-dasharray": "-"});
+	var angle = Raphael.angle(x2, y2, x1, y1);
+	arrow.transform("r" + angle);
+    return arrow;
+};
+
+Raphael.fn.cloud = function (nodes) {
+	if(nodes == undefined ) return;
+	var box1 = nodes[0].getBBox();
+	var minX = box1.x,
+	minY = box1.y,
+	maxX = box1.x + box1.width,
+	maxY = box1.y + box1.height;
+
+	$.each(nodes, function(index, node) { 
+		var box = node.getBBox();
+		if(box.x < minX){
+			minX = box.x;
+		}
+		if(box.y < minY){
+			minY = box.y;
+		}
+		if(box.x + box.width > maxX){
+			maxX = box.x + box.width;
+		}
+		
+		if(box.y + box.height > maxY){
+			maxY = box.y + box.height;
+		}
+	}); 
+	var x = (minX + maxX)/2;
+	var y = (minY + maxY)/2;
+	var width = maxX - minX;
+	var height = maxY - minY;
+	
+	
+	var cloud = this.ellipse(x,y,width/2,height/2).attr({fill: "#fff", stroke: "#666",  "stroke-width": 6});
+	cloud.toBack();
+	return cloud;
+};
+
 function updateBodySize() {
     document.body.style.width = window.innerWidth + "px";
     document.body.style.height = window.innerHeight + "px";
-    width = window.innerWidth;
-    height = window.innerHeight;
 }
 
 $(function () {
@@ -63,23 +87,90 @@ $(function () {
     window.onresize = updateBodySize;
     updateBodySize();
     
-	var paper = Raphael("canvas", width, height);
-	var controller = paper.image("assets/images/controller.png", 1100, 50, 120, 160);
+	var paper = Raphael("canvas",  window.innerWidth, window.innerHeight);
+	var controller = paper.node("assets/images/controller.png", 1100, 50, 120, 160, "Controller");
 	
-	var router1 = paper.image("assets/images/router.png", 400, 500, 84, 64);
-	var router2 = paper.image("assets/images/router.png", 750, 400, 84, 64);
-	var router3 = paper.image("assets/images/router.png", 1000, 300, 84, 64);
-	var router4 = paper.image("assets/images/router.png", 600, 600, 84, 64);
-	var router5 = paper.image("assets/images/router.png", 750, 700, 84, 64);
-	var router6 = paper.image("assets/images/router.png", 1000, 700, 84, 64);
-	var router7 = paper.image("assets/images/router.png", 1200, 500, 84, 64);
+	var router1 = paper.node("assets/images/router.png", 400, 500, 84, 64, "OpenFlow Switch 1");
+	var router2 = paper.node("assets/images/router.png", 600, 600, 84, 64, "OpenFlow Switch 2");
+	var router3 = paper.node("assets/images/router.png", 750, 700, 84, 64, "OpenFlow Switch 3");
+	var router4 = paper.node("assets/images/router.png", 1000, 700, 84, 64, "OpenFlow Switch 4");
+	var router5 = paper.node("assets/images/router.png", 1200, 500, 84, 64, "OpenFlow Switch 5");
+	var router6 = paper.node("assets/images/router.png", 750, 400, 84, 64, "OpenFlow Switch 6");
+	var router7 = paper.node("assets/images/router.png", 1000, 300, 84, 64, "OpenFlow Switch 7");
 	
-	paper.connection(controller, router1, "#fff");
-	paper.connection(controller, router2, "#fff");
-	paper.connection(controller, router3, "#fff");
-	paper.connection(controller, router4, "#fff");
-	paper.connection(controller, router5, "#fff");
-	paper.connection(controller, router6, "#fff");
-	paper.connection(controller, router7, "#fff");
+	paper.connection(controller, router1, "#f00", true);
+	paper.connection(controller, router2, "#f00", true);
+	paper.connection(controller, router3, "#f00", true);
+	paper.connection(controller, router4, "#f00", true);
+	paper.connection(controller, router5, "#f00", true);
+	paper.connection(controller, router6, "#f00", true);
+	paper.connection(controller, router7, "#f00", true);
+	
+	var firewall1 = paper.node("assets/images/firewall.png", 300, 300, 100, 150, "Firewall");
+	var firewall2 = paper.node("assets/images/firewall.png", 450, 650, 100, 150, "Anti-DDoS");
+	var firewall3 = paper.node("assets/images/firewall.png", 600, 750, 100, 150, "WAF");
+	var firewall4 = paper.node("assets/images/firewall.png", 1100, 750, 100, 150, "AV-FW");
+	var firewall5 = paper.node("assets/images/firewall.png", 650, 200, 100, 150, "IPS");
 
+	paper.connection(firewall1, router1, "#2898E0");
+	paper.connection(firewall2, router2, "#2898E0");
+	paper.connection(firewall3, router3, "#2898E0");
+	paper.connection(firewall4, router4, "#2898E0");
+	paper.connection(firewall5, router6, "#2898E0");
+	
+	paper.connection(router1, router2, "#2898E0");
+	paper.connection(router2, router3, "#2898E0");
+	paper.connection(router3, router4, "#2898E0");
+	paper.connection(router4, router5, "#2898E0");
+	paper.connection(router5, router6, "#2898E0");
+	paper.connection(router6, router7, "#2898E0");
+	paper.connection(router7, router5, "#2898E0");
+	paper.connection(router1, router6, "#2898E0");
+	paper.connection(router2, router6, "#2898E0");
+	paper.connection(router2, router5, "#2898E0");
+	paper.connection(router3, router5, "#2898E0");
+	
+	var internet1 = paper.node("assets/images/internet.png", 100, 300, 128, 128);
+	var internet2 = paper.node("assets/images/internet.png", 100, 500, 128, 128);
+	var internet3 = paper.node("assets/images/internet.png", 100, 700, 128, 128);
+	
+	paper.connection(router1, internet1, "#2898E0");
+	paper.connection(router1, internet2, "#2898E0");
+	paper.connection(router1, internet3, "#2898E0");
+	
+	var server1 = paper.node("assets/images/web.png", 1400, 300, 128, 150, "Web Server");
+	var server2 = paper.node("assets/images/mail.png", 1400, 500, 128, 128, "Mail Server");
+	var server3 = paper.node("assets/images/ftp.png", 1400, 700, 128, 128, "FTP Server");
+	
+	paper.connection(router7, server1, "#2898E0");
+	paper.connection(router5, server2, "#2898E0");
+	paper.connection(router5, server3, "#2898E0");
+	var cloud1 = paper.path("M300, 300c400, 500z").attr({fill: "#fff",stroke: "#ccc", "stroke-width": 10});
+	cloud1.toBack();
+	
+	var arrow1 = paper.arrow(internet1, router1, "#2898E0");
+	
+	var arrow2 = paper.arrow(controller, router1, "#f00");
+	
+	paper.cloud([firewall1, firewall2, firewall3, firewall4, firewall5, router5]);
+	paper.cloud([server1, server2, server3]);
+//	var path = paper.route([controller, router1]),
+//	len = p.getTotalLength();
+
+//	function MOVE() {
+//        arrow4.animate({along: 1}, 2e4, function () {
+//        	arrow4.attr({along: 0});
+//            setTimeout(MOVE);
+//        });
+//    }
+//	MOVE();
+//    fade = function (element) {
+//        return function () {
+//        	if(element.is_visible()){
+//        		element.hide();
+//        	}else{
+//        		element.show();
+//        	}
+//        };
+//    };
 });
