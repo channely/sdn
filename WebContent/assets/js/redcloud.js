@@ -5,12 +5,14 @@ function updateBodySize() {
         graph.moveToCenter();
     }
 }
+
 var graph;
 $(function () {
     document.body.style.margin = "0px";
     document.body.style.overflow = "hidden";
     window.onresize = updateBodySize;
     updateBodySize();
+    
   	graph = new Q.Graph('canvas');
   	graph.visibleFilter = function(d){return d.visible !== false;};
   	
@@ -73,6 +75,23 @@ $(function () {
 		return arrow;
 	}
 	
+	function createToolBar(){
+		var content = "<div  id='toolbar' class='btn-toolbar'><div class='btn-group'>";
+		content += "<div id='redcloud' class='btn btn-danger' type='button'><a href='redcloud.html'>红云</a></div>";
+		content += "<div id='whitecloud' class='btn btn-default' type='button'><a href='whitecloud.html'>白云</a></div>";
+		content += "<div id='blackcloud' class='btn btn-primary' style='color:#fff;background-color:#000' type='button'><a href='blackcloud.html'>黑云</a></div>";
+		content +="</div></div>";
+		var toolbar = $(content)[0];
+		Q.css(toolbar, {
+		    position: "absolute",
+		    top: "0px",
+		    left: "50%"
+		    
+		});
+		graph.html.parentNode.appendChild(toolbar);
+	}
+	
+	createToolBar();
 	var nodes = {};
 	var edges = {};
 	var groups = {};
@@ -98,7 +117,6 @@ $(function () {
 					graph.invalidate();
 				}, 0);
 			}
-
 			nodes[id]=node;
 		});
 		

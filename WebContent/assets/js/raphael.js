@@ -16,19 +16,66 @@ Raphael.fn.connection = function (obj1, obj2, color, dashed) {
     return c;
 };
 
+Raphael.fn.label = function (x, y, text, fontSize, color) {
+	var label = this.text(x, y, text);
+	label.attr({
+		"font-size": fontSize,
+		"fill" : color
+	});
+	function hide() {
+		label.hide();
+		setTimeout(show, 1000);
+	}
+		 
+	function show() {
+		label.show();
+		setTimeout(hide, 1000);
+	}
+		 
+	setTimeout(hide, 1000);
+
+    return label;
+};
+
 Raphael.fn.node = function (image, x, y, width, height, text) {
-	var i = this.image(image, x, y, width, height);
+	var node = this.image(image, x, y, width, height);
 	
 	if(text){
 		var tx = x + width/2;
 		var ty = y + height + 10;
 		var tt = this.text(tx, ty, text).attr({"font-size": 16});
-		i.text = tt;
+		node.text = tt;
 	}
-    return i;
+    return node;
 };
 
-Raphael.fn.arrow = function (node1, node2, color) {
+Raphael.fn.line = function (node1, node2, color, dashed) {
+	var line = this.connection(node1, node2, color, dashed);
+	var box1 = node1.getBBox(),
+	box2= node2.getBBox(),
+	x1 = box1.x + box1.width/2,
+	y1 = box1.y + box1.height/2,
+	x2 = box2.x + box2.width/2,
+	y2 = box2.y + box2.height/2;
+	var angle = Raphael.angle(x2, y2, x1, y1);
+	var len = line.getTotalLength();
+	
+	function run(paper) {
+		var arrow = paper.path(["M", x1, y1] + "l-8,-8 8,8 -8,8").attr({fill: "none", stroke: color});
+		arrow.transform("r" + angle);
+		var path = arrow.attr("path");
+		var _forwardPath = Raphael.transformPath(path+"", 'T'+len+',0');
+		arrow.animate({path: _forwardPath}, len*10, function(){
+			arrow.remove();
+			run(paper);
+		});
+	}
+	
+	run(this);
+    return line;
+};
+
+Raphael.fn.http = function (node1, node2, color) {
 	var box1 = node1.getBBox(),
 	box2= node2.getBBox(),
 	x1 = box1.x + box1.width/2,
@@ -98,13 +145,13 @@ $(function () {
 	var router6 = paper.node("assets/images/router.png", 750, 400, 84, 64, "OpenFlow Switch 6");
 	var router7 = paper.node("assets/images/router.png", 1000, 300, 84, 64, "OpenFlow Switch 7");
 	
-	paper.connection(controller, router1, "#f00", true);
-	paper.connection(controller, router2, "#f00", true);
-	paper.connection(controller, router3, "#f00", true);
-	paper.connection(controller, router4, "#f00", true);
-	paper.connection(controller, router5, "#f00", true);
-	paper.connection(controller, router6, "#f00", true);
-	paper.connection(controller, router7, "#f00", true);
+	paper.line(controller, router1, "#f00", true);
+	paper.line(controller, router2, "#f00", true);
+	paper.line(controller, router3, "#f00", true);
+	paper.line(controller, router4, "#f00", true);
+	paper.line(controller, router5, "#f00", true);
+	paper.line(controller, router6, "#f00", true);
+	paper.line(controller, router7, "#f00", true);
 	
 	var firewall1 = paper.node("assets/images/firewall.png", 300, 300, 100, 150, "Firewall");
 	var firewall2 = paper.node("assets/images/firewall.png", 450, 650, 100, 150, "Anti-DDoS");
@@ -145,32 +192,13 @@ $(function () {
 	paper.connection(router7, server1, "#2898E0");
 	paper.connection(router5, server2, "#2898E0");
 	paper.connection(router5, server3, "#2898E0");
-	var cloud1 = paper.path("M300, 300c400, 500z").attr({fill: "#fff",stroke: "#ccc", "stroke-width": 10});
-	cloud1.toBack();
-	
-	var arrow1 = paper.arrow(internet1, router1, "#2898E0");
-	
-	var arrow2 = paper.arrow(controller, router1, "#f00");
 	
 	paper.cloud([firewall1, firewall2, firewall3, firewall4, firewall5, router5]);
 	paper.cloud([server1, server2, server3]);
-//	var path = paper.route([controller, router1]),
-//	len = p.getTotalLength();
-
-//	function MOVE() {
-//        arrow4.animate({along: 1}, 2e4, function () {
-//        	arrow4.attr({along: 0});
-//            setTimeout(MOVE);
-//        });
-//    }
-//	MOVE();
-//    fade = function (element) {
-//        return function () {
-//        	if(element.is_visible()){
-//        		element.hide();
-//        	}else{
-//        		element.show();
-//        	}
-//        };
-//    };
+	
+	paper.label(800, 150, "Controller send Flow Table to OpenFlow Switchs", 24, "#2898E0");
+	
+	paper.text(300, 100, "CloudWAF based on SDN").attr({
+		"font-size": 36
+	});
 });
