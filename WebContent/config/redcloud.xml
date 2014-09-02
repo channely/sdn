@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graph>
+	<nodes>
+		<node id="controller">
+			<name>Controller</name>
+			<x>300</x>
+			<y>-350</y>
+			<img>assets/images/controller.png</img>
+			<type>controller</type>
+		</node>
+		<node id="router1">
+			<name>OpenFlow Switch 1</name>
+			<x>-400</x>
+			<y>0</y>
+			<img>assets/images/router.png</img>
+			<type>router</type>
+		</node>
+		<node id="router2">
+			<name>OpenFlow Switch 2</name>
+			<x>-200</x>
+			<y>100</y>
+			<img>assets/images/router.png</img>
+			<type>router</type>
+		</node>
+		<node id="router3">
+			<name>OpenFlow Switch 3</name>
+			<x>-50</x>
+			<y>200</y>
+			<img>assets/images/router.png</img>
+			<type>router</type>
+		</node>
+		<node id="router4">
+			<name>OpenFlow Switch 4</name>
+			<x>200</x>
+			<y>200</y>
+			<img>assets/images/router.png</img>
+			<type>router</type>
+		</node>
+		<node id="router5">
+			<name>OpenFlow Switch 5</name>
+			<x>350</x>
+			<y>50</y>
+			<img>assets/images/router.png</img>
+			<type>router</type>
+		</node>
+		<node id="router6">
+			<name>OpenFlow Switch 6</name>
+			<x>0</x>
+			<y>-100</y>
+			<img>assets/images/router.png</img>
+			<type>router</type>
+		</node>
+		<node id="router7">
+			<name>OpenFlow Switch 7</name>
+			<x>200</x>
+			<y>-200</y>
+			<img>assets/images/router.png</img>
+			<type>router</type>
+		</node>
+		<node id="internet1">
+			<name></name>
+			<x>-700</x>
+			<y>-150</y>
+			<img>assets/images/internet.png</img>
+			<type>internet</type>
+		</node>
+		<node id="internet2">
+			<name></name>
+			<x>-700</x>
+			<y>0</y>
+			<img>assets/images/internet.png</img>
+			<type>internet</type>
+		</node>
+		<node id="internet3">
+			<name></name>
+			<x>-700</x>
+			<y>150</y>
+			<img>assets/images/internet.png</img>
+			<type>internet</type>
+		</node>		
+		<node id="server1">
+			<name>Firewall</name>
+			<x>-450</x>
+			<y>-150</y>
+			<img>assets/images/firewall.png</img>
+			<type>firewall</type>
+		</node>		
+		<node id="server2">
+			<name>IPS</name>
+			<x>-100</x>
+			<y>-200</y>
+			<img>assets/images/firewall.png</img>
+			<type>firewall</type>
+		</node>	
+		<node id="server3">
+			<name>Anti-DDoS</name>
+			<x>-350</x>
+			<y>250</y>
+			<img>assets/images/firewall.png</img>
+			<type>firewall</type>
+		</node>	
+		<node id="server4">
+			<name>WAF</name>
+			<x>-150</x>
+			<y>350</y>
+			<img>assets/images/firewall.png</img>
+			<type>firewall</type>
+		</node>	
+		<node id="server5">
+			<name>AV-FW</name>
+			<x>300</x>
+			<y>350</y>
+			<img>assets/images/firewall.png</img>
+			<type>firewall</type>
+		</node>	
+		<node id="server6">
+			<name>Web Server</name>
+			<x>650</x>
+			<y>-180</y>
+			<img>assets/images/web.png</img>
+			<type>server</type>
+			<visible>false</visible>
+		</node>	
+		<node id="server7">
+			<name>Mail Server</name>
+			<x>650</x>
+			<y>0</y>
+			<img>assets/images/mail.png</img>
+			<type>server</type>
+			<visible>false</visible>
+		</node>	
+		<node id="server8">
+			<name>DB Server</name>
+			<x>650</x>
+			<y>180</y>
+			<img>assets/images/database.png</img>
+			<type>server</type>
+			<visible>false</visible>
+		</node>	
+	</nodes>
+	<edges>
+		<edge>
+			<start>router1</start>
+			<end>router2</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router2</start>
+			<end>router3</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router3</start>
+			<end>router4</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router4</start>
+			<end>router5</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router5</start>
+			<end>router6</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router6</start>
+			<end>router7</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router6</start>
+			<end>router1</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router2</start>
+			<end>router6</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router2</start>
+			<end>router5</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router3</start>
+			<end>router5</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router5</start>
+			<end>router7</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>internet1</start>
+			<end>router1</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>internet2</start>
+			<end>router1</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>internet3</start>
+			<end>router1</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router1</start>
+			<end>server1</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router6</start>
+			<end>server2</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router2</start>
+			<end>server3</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router3</start>
+			<end>server4</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router4</start>
+			<end>server5</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router5</start>
+			<end>server8</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router5</start>
+			<end>server7</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+		<edge>
+			<start>router7</start>
+			<end>server6</end>
+			<color>#2898E0</color>
+			<arrow>false</arrow>
+			<dash>false</dash>
+		</edge>
+	 	<edge id="edge1">
+			<start>controller</start>
+			<end>router1</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge2">
+			<start>controller</start>
+			<end>router2</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge3">
+			<start>controller</start>
+			<end>router3</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge4">
+			<start>controller</start>
+			<end>router4</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge5">
+			<start>controller</start>
+			<end>router5</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge6">
+			<start>controller</start>
+			<end>router6</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+		<edge id="edge7">
+			<start>controller</start>
+			<end>router7</end>
+			<color>#FF6B6B</color>
+			<arrow>true</arrow>
+			<dash>true</dash>
+		</edge>
+	</edges>
+	<groups>
+		<group id="cloudGroup">
+			<contain>router1,router2,router3,router4,router5,router6,router7,server1,server2,server3,server4,server5</contain>
+		</group>
+		<group id="webGroup">
+			<contain>server6,server7,server8</contain>
+		</group>
+	</groups>
+	<texts>
+		<text>
+			<name>CloudWAF Based on SDN</name>
+			<x>-500</x>
+			<y>-350</y>
+			<fontSize>30</fontSize>
+			<color>#000</color>
+		</text>
+	</texts>
+	<labels>
+		<label>
+			<data>Controller send Flow Table to OpenFlow Switchs</data>
+			<color>#D9EDF7</color>
+			<fontSize>20</fontSize>
+			<interval>4000</interval>
+			<belong>cloudGroup</belong>
+		</label>
+	</labels>
+	<paths>
+		<path id="path1">
+		 	<route>internet1,router1,server1,router1,router2,server3,router2,router6,server2,router6,router5,server7,router5,router6,router1,internet1</route>
+		 	<start>200</start>
+		 	<step>40</step>
+		 	<router>router5</router>
+		 	<server>server7</server>
+		 </path>
+	  	<path id="path2">
+			<route>internet2,router1,server1,router1,router6,server2,router6,router7,server6,router7,router6,router2,router1,internet2</route>
+			<start>20000</start>
+			<step>40</step>
+		 	<router>router7</router>
+		 	<server>server6</server>
+		</path>
+		<path id="path3">
+			<route>internet3,router1,server1,router1,router2,server3,router2,router3,server4,router3,router4,server5,router4,router5,server8,router5,router4,router3,router2,router1,internet3</route>
+			<start>5000</start>
+			<step>40</step>
+		 	<router>router5</router>
+		 	<server>server8</server>
+		 	<threshold>16</threshold>
+		</path>
+	</paths>
+</graph>

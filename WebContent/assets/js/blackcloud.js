@@ -11,7 +11,7 @@ $(function () {
   	updateBodySize();
 	createToolBar();
 	
-	$.get("config/redcloud.xml", function(xml){
+	$.get("config/blackcloud.xml", function(xml){
 		
 		configNode(xml);
 		
@@ -23,7 +23,7 @@ $(function () {
 		
 		configLabel(xml);
 		
-		configPath(xml);
+		//configPath(xml);
 	});
 
 	graphClickAction();

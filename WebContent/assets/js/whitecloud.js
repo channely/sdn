@@ -11,7 +11,7 @@ $(function () {
   	updateBodySize();
 	createToolBar();
 	
-	$.get("config/redcloud.xml", function(xml){
+	$.get("config.xml", function(xml){
 		
 		configNode(xml);
 		
