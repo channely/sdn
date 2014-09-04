@@ -22,8 +22,19 @@ $(function () {
 		configText(xml);
 		
 		configLabel(xml);
+		configPath(xml);
 		
-		//configPath(xml);
+		var node = nodes['blackcloud'];
+		var x = 0, step = Math.PI/18;
+		var timer = setTimeout(function MOVE(){
+		    x += step;
+		    x %= 2*Math.PI;
+		    node.rotate = x;
+		    timer = setTimeout(MOVE, 100);
+		}, 0);
+		
+		timers.push(timer);
+
 	});
 
 	graphClickAction();

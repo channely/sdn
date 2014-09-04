@@ -11,7 +11,7 @@ $(function () {
   	updateBodySize();
 	createToolBar();
 	
-	$.get("config.xml", function(xml){
+	$.get("config/whitecloud.xml", function(xml){
 		
 		configNode(xml);
 		

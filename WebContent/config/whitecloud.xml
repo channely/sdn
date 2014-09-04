@@ -82,35 +82,35 @@
 			<name>Firewall</name>
 			<x>-450</x>
 			<y>-150</y>
-			<img>assets/images/firewall.png</img>
+			<img>assets/images/whitecloud.png</img>
 			<type>firewall</type>
 		</node>		
 		<node id="server2">
 			<name>IPS</name>
 			<x>-100</x>
 			<y>-200</y>
-			<img>assets/images/firewall.png</img>
+			<img>assets/images/whitecloud.png</img>
 			<type>firewall</type>
 		</node>	
 		<node id="server3">
 			<name>Anti-DDoS</name>
 			<x>-350</x>
 			<y>250</y>
-			<img>assets/images/firewall.png</img>
+			<img>assets/images/whitecloud.png</img>
 			<type>firewall</type>
 		</node>	
 		<node id="server4">
 			<name>WAF</name>
 			<x>-150</x>
 			<y>350</y>
-			<img>assets/images/firewall.png</img>
+			<img>assets/images/whitecloud.png</img>
 			<type>firewall</type>
 		</node>	
 		<node id="server5">
 			<name>AV-FW</name>
 			<x>300</x>
 			<y>350</y>
-			<img>assets/images/firewall.png</img>
+			<img>assets/images/whitecloud.png</img>
 			<type>firewall</type>
 		</node>	
 		<node id="server6">
@@ -119,7 +119,6 @@
 			<y>-180</y>
 			<img>assets/images/web.png</img>
 			<type>server</type>
-			<visible>false</visible>
 		</node>	
 		<node id="server7">
 			<name>Mail Server</name>
@@ -127,7 +126,6 @@
 			<y>0</y>
 			<img>assets/images/mail.png</img>
 			<type>server</type>
-			<visible>false</visible>
 		</node>	
 		<node id="server8">
 			<name>DB Server</name>
@@ -135,14 +133,6 @@
 			<y>180</y>
 			<img>assets/images/database.png</img>
 			<type>server</type>
-			<visible>false</visible>
-		</node>	
-		<node id="blackcloud">
-			<name></name>
-			<x>0</x>
-			<y>50</y>
-			<img>assets/images/blackcloud.png</img>
-			<type>cloud</type>
 		</node>	
 	</nodes>
 	<edges>
@@ -378,39 +368,29 @@
 	</labels>
 	<paths>
 		<path id="path1">
-			<route>internet1,router1,blackcloud</route>
-		 	<start>0</start>
-		 	<step>40</step>
-		 </path>
-	  	<path id="path2">
-			<route>internet2,router1,server1,router1,router2,server3,router2,blackcloud</route>
+			<route>server1,router1,internet1</route>
+			<start>200</start>
+			<step>40</step>
+		</path>
+		<path id="path2">
+			<route>server2,router6,router1,internet1</route>
 			<start>200</start>
 			<step>40</step>
 		</path>
 		<path id="path3">
-			<route>internet2,router1,server1,router1,router2,server3,router2,router3,server4,router3,blackcloud</route>
-			<start>400</start>
+			<route>server3,router2,router1,internet1</route>
+			<start>200</start>
 			<step>40</step>
 		</path>
 		<path id="path4">
-			<route>internet2,router1,server1,router1,router2,server3,router2,router3,server4,router3,router4,server5,router4,blackcloud</route>
-			<start>600</start>
+			<route>server4,router3,router2,router1,internet1</route>
+			<start>200</start>
 			<step>40</step>
 		</path>
 		<path id="path5">
-			<route>internet1,router1,server1,router1,router6,server2,router6,router5,blackcloud</route>
-			<start>800</start>
+			<route>server5,router4,router3,router2,router1,internet1</route>
+			<start>200</start>
 			<step>40</step>
 		</path>
-		<path id="path6">
-			<route>internet1,router1,server1,router1,router6,server2,router6,blackcloud</route>
-			<start>1000</start>
-			<step>40</step>
-		</path>
-		<path id="path7">
-			<route>internet1,router1,server1,router1,router6,server2,router6,router7,blackcloud</route>
-			<start>2000</start>
-			<step>40</step>
-		</path>	
 	</paths>
 </graph>

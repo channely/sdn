@@ -324,6 +324,7 @@ function configPath(xml){
 		var startnode = null;
 		$.each(route, function(index, value){
 			var node = nodes[value];
+			//定一个节点处生成箭头
 			if(index == 0){
 				startnode = node;
 				path.moveTo(node.location.x, node.location.y);
@@ -331,12 +332,13 @@ function configPath(xml){
 					arrow = createArrow( "", node.location.x, node.location.y, "arrow.7", "#4ECDC4");
 				}, start);
 			}else{
+				//其他节点加入路径
 				path.lineTo(node.location.x, node.location.y);
 			}
 		});
 		path.validate();
 		paths[id] = path;
-
+		//如果没有设置阈值，则为步长一半
 		var L = path.length;
 		if( threshold == "" ){
 			threshold = step / 2;
@@ -348,13 +350,18 @@ function configPath(xml){
 		    x += step;
 		    x %= L;
 		    var p = path.getLocation(x);
-		    if(Math.abs(p.x - router.location.x) < threshold){
-		    	server.visible = server.visible === false;
-		    	server.invalidateVisibility();
-		    	graph.invalidate();
-		    }else if(Math.abs(p.x - startnode.location.x) < threshold){
-		    	x = 0;
+		    if(router != undefined){
+			    if(Math.abs(p.x - router.location.x) < threshold){
+			    	 //进入倒数第二个router时，显示server
+			    	server.visible = server.visible === false;
+			    	server.invalidateVisibility();
+			    	graph.invalidate();
+			    }else if(Math.abs(p.x - startnode.location.x) < threshold){
+			    	//返回起始点时，偏差归零
+			    	x = 0;
+			    }
 		    }
+		    //设置箭头方向
 		    arrow.location = new Q.Point(p.x, p.y);
 		    arrow.rotate = p.rotate;
 		    timer = setTimeout(MOVE, 200);
