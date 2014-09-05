@@ -53,7 +53,7 @@ function createArrow(name, x, y, shape, color) {
 	arrow.setStyle(Q.Styles.SHAPE_FILL_COLOR, color);
 	arrow.image = Q.Shapes.getShape(shape, -10, -5, 30, 20);
 	arrow.zIndex = 20;
-	arrow.setStyle(Q.Styles.SHAPE_STROKE_STYLE, color);
+	//arrow.setStyle(Q.Styles.SHAPE_STROKE_STYLE, color);
 	return arrow;
 }
 
@@ -319,6 +319,10 @@ function configPath(xml){
 		var router = nodes[$(this).children("router").text()];
 		var server = nodes[$(this).children("server").text()];
 		var threshold = $(this).children("threshold").text();
+		var arrowcolor = $(this).children("arrowcolor").text();
+		if( arrowcolor == "" ){
+			arrowcolor = "#4ECDC4";
+		}
 		var path = new Q.Path();
 		var arrow;
 		var startnode = null;
@@ -329,7 +333,7 @@ function configPath(xml){
 				startnode = node;
 				path.moveTo(node.location.x, node.location.y);
 				setTimeout(function MOVE(){
-					arrow = createArrow( "", node.location.x, node.location.y, "arrow.7", "#4ECDC4");
+					arrow = createArrow( "", node.location.x, node.location.y, "arrow.7", arrowcolor);
 				}, start);
 			}else{
 				//其他节点加入路径

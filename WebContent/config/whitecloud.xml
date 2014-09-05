@@ -368,29 +368,46 @@
 	</labels>
 	<paths>
 		<path id="path1">
+			<route>internet1,router1,router2,router3,router4,router5</route>
+			<start>0</start>
+			<step>40</step>
+			<arrowcolor>#F00</arrowcolor>
+		</path>
+		<path id="path2">
+			<route>internet1,router1,router6,router7</route>
+			<start>2000</start>
+			<step>40</step>
+			<arrowcolor>#F00</arrowcolor>
+		</path>
+		<path id="path3">
 			<route>server1,router1,internet1</route>
 			<start>200</start>
 			<step>40</step>
+			<arrowcolor>#FFF</arrowcolor>
 		</path>
-		<path id="path2">
+		<path id="path4">
 			<route>server2,router6,router1,internet1</route>
 			<start>200</start>
 			<step>40</step>
+			<arrowcolor>#FFF</arrowcolor>
 		</path>
-		<path id="path3">
+		<path id="path5">
 			<route>server3,router2,router1,internet1</route>
 			<start>200</start>
 			<step>40</step>
+			<arrowcolor>#FFF</arrowcolor>
 		</path>
-		<path id="path4">
+		<path id="path6">
 			<route>server4,router3,router2,router1,internet1</route>
 			<start>200</start>
 			<step>40</step>
+			<arrowcolor>#FFF</arrowcolor>
 		</path>
-		<path id="path5">
+		<path id="path7">
 			<route>server5,router4,router3,router2,router1,internet1</route>
 			<start>200</start>
 			<step>40</step>
+			<arrowcolor>#FFF</arrowcolor>
 		</path>
 	</paths>
 </graph>
